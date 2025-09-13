@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { trackConversion } from '../utils/analytics';
 import { usePriceVariant } from '../hooks/usePriceVariant';
@@ -10,7 +9,6 @@ interface StickyCTAProps {
 const StickyCTA: React.FC<StickyCTAProps> = ({ isVisible }) => {
   const priceVariant = usePriceVariant();
 
-  // Render nothing if the variant isn't determined yet or if the CTA should be hidden
   if (!priceVariant) {
     return null;
   }

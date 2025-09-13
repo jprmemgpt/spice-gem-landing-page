@@ -1,4 +1,3 @@
-
 // This utility function sends custom events to Google Analytics.
 // We use this to track important user actions, like clicking a purchase button,
 // and to monitor the performance of our A/B tests.

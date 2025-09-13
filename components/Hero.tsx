@@ -1,4 +1,3 @@
-
 import { forwardRef } from 'react';
 import { trackConversion } from '../utils/analytics';
 import { usePriceVariant } from '../hooks/usePriceVariant';
@@ -24,7 +23,6 @@ const Hero = forwardRef<HTMLDivElement>((_props, ref) => {
   const commonButtonClasses = "inline-block w-full text-deep-black font-bold uppercase text-xl md:text-2xl py-4 px-8 rounded-lg transition-all duration-300 text-center";
   const enabledButtonClasses = "bg-electric-green shadow-glow-green hover:bg-neon-orange hover:shadow-glow-orange transform hover:scale-105 animate-pulse-subtle";
   const disabledButtonClasses = "bg-gray-400 text-gray-700 cursor-not-allowed opacity-70";
-
 
   return (
     <section 

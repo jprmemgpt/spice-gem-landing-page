@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { PRICE_VARIANTS, PriceVariantID } from '../constants';
 import { trackVariantView } from '../utils/analytics';
@@ -19,7 +18,7 @@ export const usePriceVariant = () => {
       // New user, randomly assign a variant (50/50 split)
       assignedVariantId = Math.random() < 0.5 ? 'A' : 'B';
       localStorage.setItem(STORAGE_KEY, assignedVariantId);
-      // Track the variant assignment event for analytics
+      // Track the variant assignment event for analytics for new users
       trackVariantView(assignedVariantId);
     }
 

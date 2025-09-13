@@ -1,12 +1,12 @@
-
 // This file contains the single source of truth for pricing and checkout links.
 // We are running an A/B test to determine the optimal price point ($69 vs $99).
 
 // HOW TO GET THE FINAL LINK:
 // 1. Log in to your Shopify Admin.
 // 2. Go to "Products" and select your Spice Gem product.
-// 3. Set the product price to $99.
-// 4. Click "Create checkout link", copy the new link, and paste it for variant B below.
+// 3. Create a variant for the $99 price point.
+// 4. For that variant, click "More actions" -> "Create checkout link".
+// 5. Copy the link and paste it for variant B below, replacing the empty string.
 
 export type PriceVariantID = 'A' | 'B';
 
@@ -36,6 +36,3 @@ export const PRICE_VARIANTS: Record<PriceVariantID, VariantDetails> = {
     shopifyUrl: "" 
   }
 };
-
-// We will keep one URL as a fallback in case the A/B test hook fails.
-export const SHOPIFY_PRODUCT_URL = PRICE_VARIANTS.A.shopifyUrl;

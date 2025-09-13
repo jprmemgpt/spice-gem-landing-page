@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { SecurePaymentIcon, PrivacyIcon } from './icons';
 import { trackConversion } from '../utils/analytics';
