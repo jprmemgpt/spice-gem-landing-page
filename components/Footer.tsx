@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
         </div>
         <div className="mt-10 pt-8 border-t border-gray-700 text-center text-xs">
           <p>By purchasing, you agree to our <a href="#privacy" className="underline hover:text-electric-green">Privacy Policy</a> and <a href="#terms" className="underline hover:text-electric-green">Terms & Conditions</a>.</p>
-          <p className="mt-2">© 2025 Spice Viking. All Rights Reserved.</p>
+          <p className="mt-2">© 2025 JPRCO LLC. All Rights Reserved.</p>
         </div>
       </div>
     </footer>

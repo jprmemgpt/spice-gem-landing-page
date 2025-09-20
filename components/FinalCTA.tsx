@@ -1,22 +1,9 @@
 import React from 'react';
 import { SecurePaymentIcon, PrivacyIcon } from './icons';
+import { SHOPIFY_PRODUCT_URL } from '../constants';
 import { trackConversion } from '../utils/analytics';
-import { usePriceVariant } from '../hooks/usePriceVariant';
 
 const FinalCTA: React.FC = () => {
-  const priceVariant = usePriceVariant();
-
-  if (!priceVariant) {
-    return null; // Don't render anything until the price variant is determined
-  }
-
-  const { displayPrice, shopifyUrl, id: variantId, price } = priceVariant;
-  const isEnabled = shopifyUrl && shopifyUrl !== "";
-
-  const commonButtonClasses = "inline-block w-full text-deep-black font-bold uppercase text-xl md:text-2xl py-4 px-8 rounded-lg transition-all duration-300 text-center";
-  const enabledButtonClasses = "bg-electric-green shadow-glow-green hover:bg-neon-orange hover:shadow-glow-orange transform hover:scale-105 animate-pulse-subtle";
-  const disabledButtonClasses = "bg-gray-400 text-gray-700 cursor-not-allowed opacity-70";
-
   return (
     <section className="bg-gray-50 py-16 sm:py-24 px-4">
       <div className="max-w-2xl mx-auto text-center">
@@ -24,14 +11,12 @@ const FinalCTA: React.FC = () => {
           Ready to meet her?
         </h2>
         <div className="w-full max-w-md mx-auto">
-          <p className="text-2xl text-deep-black mb-4 font-bold">Just {displayPrice}</p>
+          <p className="text-2xl text-deep-black mb-4 font-bold">Just $99</p>
           <a
-            href={isEnabled ? shopifyUrl : undefined}
-            onClick={isEnabled ? () => trackConversion(variantId, price) : (e) => e.preventDefault()}
-            className={`${commonButtonClasses} ${isEnabled ? enabledButtonClasses : disabledButtonClasses}`}
-            aria-label={`Unlock Her Now for ${displayPrice}`}
-            aria-disabled={!isEnabled}
-            role="button"
+            href={SHOPIFY_PRODUCT_URL}
+            onClick={trackConversion}
+            className="inline-block w-full bg-electric-green text-deep-black font-bold uppercase text-xl md:text-2xl py-4 px-8 rounded-lg shadow-glow-green hover:bg-neon-orange hover:shadow-glow-orange transition-all duration-300 transform hover:scale-105 text-center animate-pulse-subtle"
+            aria-label="Unlock Her Now for $99"
           >
             Unlock Her Now
           </a>

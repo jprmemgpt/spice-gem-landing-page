@@ -13,20 +13,30 @@ const CommunityCreations: React.FC = () => {
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* TikTok Embed Placeholder 1 */}
-          <div className="bg-gray-100 rounded-lg shadow-md flex items-center justify-center p-8 min-h-[400px]">
-            <div className="text-center text-gray-500">
-              <p className="font-bold text-lg">Your Featured TikTok Video</p>
-              <p className="text-sm">To embed a video, go to TikTok, click the "Embed" button on a video, copy the code, and paste it here.</p>
-            </div>
+          {/* Video Player 1 */}
+          <div className="rounded-lg shadow-md overflow-hidden bg-deep-black">
+            <video 
+              className="w-full h-auto" 
+              src="/1st.mp4" 
+              controls
+              preload="metadata"
+              aria-label="First featured community video"
+            >
+              Your browser does not support the video tag.
+            </video>
           </div>
 
-          {/* TikTok Embed Placeholder 2 */}
-          <div className="bg-gray-100 rounded-lg shadow-md flex items-center justify-center p-8 min-h-[400px]">
-             <div className="text-center text-gray-500">
-              <p className="font-bold text-lg">Another Featured TikTok Video</p>
-              <p className="text-sm">You can feature the best user-generated content here to show real people having amazing experiences.</p>
-            </div>
+          {/* Video Player 2 */}
+          <div className="rounded-lg shadow-md overflow-hidden bg-deep-black">
+            <video 
+              className="w-full h-auto"
+              src="/2nd.mp4"
+              controls
+              preload="metadata"
+              aria-label="Second featured community video"
+            >
+              Your browser does not support the video tag.
+            </video>
           </div>
         </div>
       </div>

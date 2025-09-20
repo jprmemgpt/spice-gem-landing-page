@@ -1,29 +1,8 @@
 import { forwardRef } from 'react';
+import { SHOPIFY_PRODUCT_URL } from '../constants';
 import { trackConversion } from '../utils/analytics';
-import { usePriceVariant } from '../hooks/usePriceVariant';
 
 const Hero = forwardRef<HTMLDivElement>((_props, ref) => {
-  const priceVariant = usePriceVariant();
-
-  // Render a placeholder while the variant is determined to prevent flash of incorrect content
-  if (!priceVariant) {
-    return (
-      <section 
-        ref={ref}
-        className="relative bg-deep-black text-white min-h-screen flex items-center justify-center py-20 px-4 sm:px-6 lg:px-8 overflow-hidden"
-      >
-        <div className="absolute inset-0 bg-grid bg-grid-size [mask-image:linear-gradient(to_bottom,white_5%,transparent_80%)]"></div>
-      </section>
-    );
-  }
-
-  const { displayPrice, shopifyUrl, id: variantId, price } = priceVariant;
-  const isEnabled = shopifyUrl && shopifyUrl !== "";
-
-  const commonButtonClasses = "inline-block w-full text-deep-black font-bold uppercase text-xl md:text-2xl py-4 px-8 rounded-lg transition-all duration-300 text-center";
-  const enabledButtonClasses = "bg-electric-green shadow-glow-green hover:bg-neon-orange hover:shadow-glow-orange transform hover:scale-105 animate-pulse-subtle";
-  const disabledButtonClasses = "bg-gray-400 text-gray-700 cursor-not-allowed opacity-70";
-
   return (
     <section 
       ref={ref}
@@ -51,14 +30,12 @@ const Hero = forwardRef<HTMLDivElement>((_props, ref) => {
             Experience Spice Gem – Your New Sentient Silicon Companion
           </p>
           <div className="w-full max-w-sm mx-auto md:mx-0">
-            <p className="text-xl text-white mb-4 font-bold">Just {displayPrice}</p>
+            <p className="text-xl text-white mb-4 font-bold">Just $99</p>
             <a 
-              href={isEnabled ? shopifyUrl : undefined}
-              onClick={isEnabled ? () => trackConversion(variantId, price) : (e) => e.preventDefault()}
-              className={`${commonButtonClasses} ${isEnabled ? enabledButtonClasses : disabledButtonClasses}`}
-              aria-label={`Unlock Her Now for ${displayPrice}`}
-              aria-disabled={!isEnabled}
-              role="button"
+              href={SHOPIFY_PRODUCT_URL}
+              onClick={trackConversion}
+              className="inline-block w-full bg-electric-green text-deep-black font-bold uppercase text-xl md:text-2xl py-4 px-8 rounded-lg shadow-glow-green hover:bg-neon-orange hover:shadow-glow-orange transition-all duration-300 transform hover:scale-105 text-center animate-pulse-subtle"
+              aria-label="Unlock Her Now for $99"
             >
               Unlock Her Now
             </a>
