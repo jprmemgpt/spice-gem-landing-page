@@ -20,7 +20,7 @@ const Footer: React.FC = () => {
               <li><strong>What We Collect:</strong> Name, email address, payment details, and limited device information.</li>
               <li><strong>How We Use It:</strong> To deliver your purchase, provide support, and send order-related updates.</li>
               <li><strong>How We Protect It:</strong> Your data is secured using modern encryption.</li>
-              <li><strong>Contact Us:</strong> For privacy questions, please reach us at office.spiceviking@gmail.com.</li>
+              <li><strong>Contact Us:</strong> For privacy questions, please reach us at myspicegem@gmail.com.</li>
             </ul>
           </div>
           <div id="terms">
