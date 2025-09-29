@@ -10,4 +10,4 @@
 // 4. Click "Create checkout link".
 // 5. Copy the link and paste it here.
 
-export const SHOPIFY_PRODUCT_URL = "https://686bd4-2.myshopify.com/cart/46243381412017:1?channel=buy_button"; // <-- IMPORTANT: THIS IS YOUR DIRECT CHECKOUT LINK
+export const SHOPIFY_PRODUCT_URL = "https://686bd4-2.myshopify.com/cart/46243381412017:1?channel=buy_button&attributes[source]=special-offer"; // <-- IMPORTANT: THIS IS YOUR DIRECT CHECKOUT LINK
