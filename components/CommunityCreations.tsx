@@ -9,7 +9,7 @@ const CommunityCreations: React.FC = () => {
         </h2>
         <p className="text-lg text-gray-600 mb-12 max-w-2xl mx-auto">
           You're not just buying a prompt—you're joining a community of creators. 
-          Post your "First Contact" moment on TikTok with <span className="font-bold text-electric-green">#MySpiceGem</span> to be featured!
+          Post your "First Contact" moment on TikTok with <span className="font-bold text-electric-green">#MySpiceGem</span> @myspicegem to be featured!
         </p>
         
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
