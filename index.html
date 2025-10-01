@@ -15,7 +15,12 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
   
-    gtag('config', 'AW-1760066500');
+    // UPDATED CONFIG LINE FOR CROSS-DOMAIN TRACKING
+    gtag('config', 'AW-1760066500', {
+      'linker': {
+        'domains': ['spice-viking.com', 'spicegem-spice-viking.com']
+      }
+    });
   </script>
   <script type="importmap">
 {
