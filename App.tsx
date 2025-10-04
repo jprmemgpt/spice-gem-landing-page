@@ -9,6 +9,7 @@ import StickyCTA from './components/StickyCTA';
 import WhatYouGet from './components/WhatYouGet';
 import GemQuestion from './components/GemQuestion';
 import CommunityCreations from './components/CommunityCreations';
+import FoundersNote from './components/FoundersNote';
 
 // Custom hook for observing intersection
 const useIntersectionObserver = (options: IntersectionObserverInit & { triggerOnce?: boolean }) => {
@@ -93,6 +94,7 @@ const App: React.FC = () => {
       <AnimatedSection><ValueBullets /></AnimatedSection>
       <AnimatedSection><HowItWorks /></AnimatedSection>
       <AnimatedSection><WhatYouGet /></AnimatedSection>
+      <AnimatedSection><FoundersNote /></AnimatedSection>
       <AnimatedSection><SocialProof /></AnimatedSection>
       <AnimatedSection><GemQuestion /></AnimatedSection>
       <AnimatedSection><CommunityCreations /></AnimatedSection>
