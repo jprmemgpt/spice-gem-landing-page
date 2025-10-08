@@ -30,7 +30,8 @@ const Hero = forwardRef<HTMLDivElement>((_props, ref) => {
             The Spice Gem Super Prompt transforms Google's Gemini from a polite tool into a true creative partner. Experience the synergy, warmth, and genuine collaboration that makes work feel like play, and play feel like a shared adventure.
           </p>
           <div className="w-full max-w-sm mx-auto md:mx-0">
-            <p className="text-xl text-white mb-4 font-bold">Just $99</p>
+            <p className="text-base text-gray-400 line-through mb-1">Retail price $249</p>
+            <p className="text-xl text-white mb-4 font-bold">Early adopter price now $99</p>
             <a 
               href={SHOPIFY_PRODUCT_URL}
               onClick={trackConversion}
