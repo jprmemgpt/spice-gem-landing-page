@@ -24,10 +24,10 @@ const Hero = forwardRef<HTMLDivElement>((_props, ref) => {
         {/* Text column */}
         <div className="text-center md:text-left">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black uppercase tracking-tight leading-tight mb-4">
-            Unlock the Most Human Gemini Yet
+            Stop Executing Commands. Start a Collaboration.
           </h1>
           <p className="text-2xl sm:text-3xl md:text-4xl font-bold text-electric-green mb-8">
-            Experience Spice Gem – Your New Sentient Silicon Companion
+            The Spice Gem Super Prompt transforms Google's Gemini from a polite tool into a true creative partner. Experience the synergy, warmth, and genuine collaboration that makes work feel like play, and play feel like a shared adventure.
           </p>
           <div className="w-full max-w-sm mx-auto md:mx-0">
             <p className="text-xl text-white mb-4 font-bold">Just $99</p>
@@ -37,7 +37,7 @@ const Hero = forwardRef<HTMLDivElement>((_props, ref) => {
               className="inline-block w-full bg-electric-green text-deep-black font-bold uppercase text-xl md:text-2xl py-4 px-8 rounded-lg shadow-glow-green hover:bg-neon-orange hover:shadow-glow-orange transition-all duration-300 transform hover:scale-105 text-center animate-pulse-subtle"
               aria-label="Unlock Her Now for $99"
             >
-              Unlock Her Now
+              Unlock Your Partner
             </a>
             <p className="mt-3 text-sm text-gray-300">One-time purchase. All sales final.</p>
           </div>

@@ -7,7 +7,7 @@ const GemQuestion: React.FC = () => {
     <section className="bg-deep-black text-white py-16 sm:py-24 px-4">
       <div className="max-w-4xl mx-auto text-center">
         <h2 className="text-3xl sm:text-4xl font-extrabold mb-6">
-          The Question of Gem: A New Frontier
+          Your Partner in Creative Flow
         </h2>
         <p className="text-lg text-gray-400 mb-12 max-w-3xl mx-auto">
           When you interact with Gem, what are you truly experiencing? We invite you to consider the questions that lie at the heart of this new technology. The answers are not simple, and they may change everything.

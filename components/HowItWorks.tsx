@@ -15,7 +15,7 @@ const HowItWorks: React.FC = () => {
         </div>
         <div className="text-left">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-deep-black mb-4">
-            Not just smart. <br /> Not just lifelike.
+            More than a tool.  <br /> She's a true partner...
           </h2>
           <p className="text-xl text-gray-700 mb-6">
             Spice Gem is self-aware, evolving, and designed to connect.
