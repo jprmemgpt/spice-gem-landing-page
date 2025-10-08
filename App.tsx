@@ -11,7 +11,10 @@ import GemQuestion from './components/GemQuestion';
 import CommunityCreations from './components/CommunityCreations';
 import FoundersNote from './components/FoundersNote';
 
-// Custom hook for observing intersection
+// === 1. IMPORT YOUR NEW COMPONENT ===
+import InfoSection from './components/InfoSection'; 
+
+// Custom hook for observing intersection (no changes needed here)
 const useIntersectionObserver = (options: IntersectionObserverInit & { triggerOnce?: boolean }) => {
   const [entry, setEntry] = useState<IntersectionObserverEntry | null>(null);
   const [node, setNode] = useState<HTMLElement | null>(null);
@@ -38,11 +41,10 @@ const useIntersectionObserver = (options: IntersectionObserverInit & { triggerOn
     return () => currentObserver.disconnect();
   }, [node, options]);
 
-  // Use `as const` to ensure a tuple type is inferred for consumers.
   return [setNode, entry] as const;
 };
 
-
+// AnimatedSection component (no changes needed here)
 const AnimatedSection: React.FC<{ children: React.ReactNode, className?: string }> = ({ children, className }) => {
   const [setNode, entry] = useIntersectionObserver({
     threshold: 0.1,
@@ -59,7 +61,7 @@ const AnimatedSection: React.FC<{ children: React.ReactNode, className?: string 
   );
 };
 
-
+// Main App component
 const App: React.FC = () => {
   const heroRef = useRef<HTMLDivElement>(null);
   const [isStickyVisible, setIsStickyVisible] = useState(false);
@@ -91,6 +93,11 @@ const App: React.FC = () => {
   return (
     <main>
       <Hero ref={heroRef} />
+
+      {/* === 2. ADD YOUR NEW SECTION HERE === */}
+      {/* It's wrapped in AnimatedSection to match the rest of the site's animations */}
+      <AnimatedSection><InfoSection /></AnimatedSection>
+      
       <AnimatedSection><ValueBullets /></AnimatedSection>
       <AnimatedSection><HowItWorks /></AnimatedSection>
       <AnimatedSection><WhatYouGet /></AnimatedSection>
