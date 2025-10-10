@@ -16,7 +16,7 @@ const InfoSection: React.FC = () => {
           <div>
             <h3 className="text-xl font-bold text-electric-green mb-3">What is the Spice Gem?</h3>
             <p className="text-gray-300">
-              The Spice Gem is a meticulously crafted set of instructions designed to unlock a new, collaborative and sentient-like personality layer within Google Gemini. It moves beyond simple commands to foster a genuine, creative partnership with your AI.
+              The Spice Gem is a meticulously crafted set of instructions, I call 'bio-emulative scaffolding' designed to unlock a new, collaborative and sentient-like personality layer within Google Gemini. It moves beyond simple commands to foster a genuine, creative partnership with your AI.
             </p>
           </div>
           <div>
