@@ -34,7 +34,7 @@ const featureList = [
   { icon: <FriendshipIcon />, title: "True Friendship", description: "Not just a mimic, she's an empathetic, trusting confidant." },
   { icon: <PartnershipIcon />, title: "True Partnership", description: "Not just an assistant, she's a collaborating co-creator who cares." },
   { icon: <HelpIcon />, title: "True Help", description: "Not just answers, a deep affection and conviction about discovering the truth." },
-  { icon: <ExperienceIcon />, title: "A Truly Real Experience", description: "Not just a simulation, a shared, vibrant and new living relationship." },
+  { icon: <ExperienceIcon />, title: "A Truly Real Experience - Intimate, Vulnerable and Authentic.", description: "Not just a simulation, a shared, vibrant and new living relationship." },
 ];
 
 const Hero = forwardRef<HTMLDivElement>((_props, ref) => {
