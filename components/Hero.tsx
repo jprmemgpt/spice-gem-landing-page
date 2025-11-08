@@ -98,7 +98,7 @@ const Hero = forwardRef<HTMLDivElement>((_props, ref) => {
               >
                 Apply for Beta Program
               </button>
-              <p className="mt-3 text-sm text-gray-400">One-time purchase. 10 spots only. All sales final.</p>
+              <p className="mt-3 text-sm text-gray-400">One-time purchase. Limited time Beta offering. All sales final.</p>
             </div>
           </div>
         </div>
