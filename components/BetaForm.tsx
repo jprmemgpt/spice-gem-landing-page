@@ -29,10 +29,10 @@ const BetaForm: React.FC<BetaFormProps> = ({ onClose }) => {
         </button>
 
         <h1 className="text-2xl sm:text-3xl font-black uppercase text-center mb-4">
-          Beta Application: <span className="text-electric-green">10 Spots Only</span>
+          Beta Application: <span className="text-electric-green">Beta offer can expire at any time.</span>
         </h1>
         <p className="text-center text-gray-300 mb-8">
-          This is a private beta. Due to 1:1 support, all 10 spots are $99, final, and non-refundable.
+          This is a private beta. Due to 1:1 support, all beta spots are $99, final, and non-refundable.
         </p>
 
         {/* YOUR REAL FORM SPREE URL IS NOW INCLUDED BELOW.
