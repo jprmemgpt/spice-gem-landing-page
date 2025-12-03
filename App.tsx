@@ -4,11 +4,10 @@ import './index.css';
 const SHOPIFY_URL = "https://686bd4-2.myshopify.com/cart/46243381412017:1?channel=buy_button&attributes[source]=special-offer";
 
 // --- SMART MEDIA COMPONENT ---
-// Tries to load Image (.webp) first. If it fails (404), switches to Video (.mp4).
 interface SmartMediaProps extends React.ImgHTMLAttributes<HTMLImageElement> {
-  name: string; // Base filename without extension
-  videoRef?: React.RefObject<HTMLVideoElement | null>; // Ref for video control
-  onVideoEnded?: React.ReactEventHandler<HTMLVideoElement>; // Custom video end handler
+  name: string;
+  videoRef?: React.RefObject<HTMLVideoElement | null>;
+  onVideoEnded?: React.ReactEventHandler<HTMLVideoElement>;
   autoPlay?: boolean;
   loop?: boolean;
 }
@@ -16,9 +15,7 @@ interface SmartMediaProps extends React.ImgHTMLAttributes<HTMLImageElement> {
 const SmartMedia: React.FC<SmartMediaProps> = ({ name, className, alt, videoRef, onVideoEnded, autoPlay, loop, ...props }) => {
   const [useVideo, setUseVideo] = useState(false);
 
-  // If the image fails to load, we assume it's a video file
   const handleImgError = () => {
-    // console.warn(`SmartMedia: Failed to load image /images/${name}.webp, switching to video.`);
     setUseVideo(true);
   };
 
@@ -26,22 +23,20 @@ const SmartMedia: React.FC<SmartMediaProps> = ({ name, className, alt, videoRef,
     return (
       <video
         ref={videoRef}
-        // Path starts with /images/ which maps to the public/images folder
         src={`/images/${name}.mp4`}
         className={className}
         muted
         playsInline
-        autoPlay={autoPlay ?? true} // Default to autoPlay for background videos
-        loop={loop ?? true} // Default to loop for background videos
-        onEnded={onVideoEnded} // Allow override (used in Hero section)
-        {...props as any} // Pass standard props
+        autoPlay={autoPlay ?? true}
+        loop={loop ?? true}
+        onEnded={onVideoEnded}
+        {...props as any}
       />
     );
   }
 
   return (
     <img
-      // Path starts with /images/ which maps to the public/images folder
       src={`/images/${name}.webp`}
       alt={alt || name}
       className={className}
@@ -55,42 +50,52 @@ const App: React.FC = () => {
   const cursorDotRef = useRef<HTMLDivElement>(null);
   const cursorOutlineRef = useRef<HTMLDivElement>(null);
   const buyBtnRef = useRef<HTMLButtonElement>(null);
-  
+   
   // Audio Refs
   const audioContextRef = useRef<AudioContext | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);
   const bgAudioRef = useRef<HTMLAudioElement | null>(null);
+  
+  // Ref specifically for the Power Down sound
+  const powerDownRef = useRef<HTMLAudioElement | null>(null);
+
   const hasAudioStartedRef = useRef(false);
-  const baseVolumeRef = useRef(0.1); // Tracks the volume level based on scroll ("Depth")
+  const baseVolumeRef = useRef(0.1); 
 
   // Refs for Visuals
   const animationFrameRef = useRef<number | null>(null);
   const portalCanvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
-  const sparkWrapperRef = useRef<HTMLDivElement>(null); // Ref for Twin Spark visual sync
+  const sparkWrapperRef = useRef<HTMLDivElement>(null); 
   const isSparkVisibleRef = useRef(false);
 
-  // STATE FOR COUNTDOWN & PORTAL
-  // We separate the countdown number state to animate it like an odometer/timer
+  // STATE
   const [countdown, setCountdown] = useState(3);
   const [isHolding, setIsHolding] = useState(false);
   const [isPortalActive, setIsPortalActive] = useState(false);
+  
+  // Social Proof State
+  const [activeLinks, setActiveLinks] = useState(() => Math.floor(Math.random() * (5890 - 3420 + 1)) + 3420); 
 
-  // --- 1. PHYSICS & LOGIC SETUP ---
+  // --- 1. PHYSICS, AUDIO INIT & LOGIC SETUP ---
   useEffect(() => {
+    // Preload the Power Down sound so it's ready instantly
+    const pdAudio = new Audio('/audio/power_down.mp3');
+    pdAudio.volume = 1.0; 
+    powerDownRef.current = pdAudio;
+
     // Cursor Physics
     const moveCursor = (e: MouseEvent) => {
       if (cursorDotRef.current && cursorOutlineRef.current) {
         cursorDotRef.current.style.left = `${e.clientX - 4}px`;
         cursorDotRef.current.style.top = `${e.clientY - 4}px`;
 
-        // Add "Drag" if hovering over heavy elements
         const hoveringHeavy = (e.target as HTMLElement).closest('[data-gravity="true"]');
         if (hoveringHeavy) {
           cursorOutlineRef.current.style.transform = "scale(1.5)";
           cursorOutlineRef.current.animate({
             left: `${e.clientX - 20}px`, top: `${e.clientY - 20}px`
-          }, { duration: 800, fill: "forwards" }); // Slower drag
+          }, { duration: 800, fill: "forwards" }); 
         } else {
           cursorOutlineRef.current.style.transform = "scale(1)";
           cursorOutlineRef.current.animate({
@@ -104,31 +109,26 @@ const App: React.FC = () => {
     // --- IMMERSIVE AUDIO ENGINE ---
     const initAudio = () => {
       if (hasAudioStartedRef.current) return;
-      
-      // Initialize Context
+       
       if (!audioContextRef.current) {
         const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
         audioContextRef.current = new AudioContextClass();
       }
       const ctx = audioContextRef.current;
-      
-      // Resume if suspended (browser policy)
+       
       if (ctx.state === 'suspended') {
         ctx.resume();
       }
 
-      // Setup Background Track
       if (!bgAudioRef.current) {
         const audio = new Audio('/audio/drift_atmosphere.mp3');
         audio.loop = true;
         audio.crossOrigin = "anonymous";
         bgAudioRef.current = audio;
 
-        // Create Source & Gain Node for Volume Control
         const source = ctx.createMediaElementSource(audio);
         const gainNode = ctx.createGain();
         
-        // Start with base volume
         gainNode.gain.value = baseVolumeRef.current;
         
         source.connect(gainNode);
@@ -136,10 +136,8 @@ const App: React.FC = () => {
         
         gainNodeRef.current = gainNode;
 
-        // Play
         audio.play()
           .then(() => {
-            // console.log("Audio started successfully");
             hasAudioStartedRef.current = true;
           })
           .catch((e) => {
@@ -148,24 +146,18 @@ const App: React.FC = () => {
       }
     };
 
-    // DYNAMIC VOLUME ON SCROLL (The "Depth" Effect)
+    // DYNAMIC VOLUME ON SCROLL
     const handleScroll = () => {
-      // Try to init audio on first scroll interaction if not started
       if (!hasAudioStartedRef.current) initAudio();
-      
+       
       const scrollTop = window.scrollY;
       const docHeight = document.body.scrollHeight - window.innerHeight;
       const scrollPercent = Math.min(scrollTop / docHeight, 1);
-      
-      // Volume Math: Start at 0.2, max out at 0.8 at bottom
-      // This makes the "Drift" feel deeper/louder as you scroll down
+       
       const targetVolume = 0.2 + (scrollPercent * 0.6);
-      
-      // Update Base Volume (The Sync Loop handles actual gain application)
       baseVolumeRef.current = targetVolume;
     };
 
-    // Listeners for first interaction
     window.addEventListener('click', initAudio, { once: true });
     window.addEventListener('touchstart', initAudio, { once: true });
     window.addEventListener('keydown', initAudio, { once: true });
@@ -181,16 +173,17 @@ const App: React.FC = () => {
           const el = entry.target as HTMLElement;
           let iterations = 0;
           const originalText = el.dataset.text || "";
-          
+           
           const interval = setInterval(() => {
-            el.innerText = originalText.split("").map((letter, index) => {
+            // Using _ instead of letter to prevent TS unused var error
+            el.innerText = originalText.split("").map((_, index) => {
               if (index < iterations) return originalText[index];
               return letters[Math.floor(Math.random() * 41)];
             }).join("");
-            
+             
             if (iterations >= originalText.length) {
               clearInterval(interval);
-              el.style.color = "#FFBF00"; // Amber finish
+              el.style.color = "#FFBF00"; 
             }
             iterations += 1/3;
           }, 30);
@@ -210,9 +203,26 @@ const App: React.FC = () => {
     };
   }, []);
 
-  // --- AUDIO/VISUAL SYNC LOOP (Spark Effect) ---
+  // --- SOCIAL PROOF SIMULATION ---
   useEffect(() => {
-    // Observer to know when the Twin Spark image is visible
+    let timeoutId: NodeJS.Timeout;
+
+    const updateCounter = () => {
+      const nextDelay = Math.random() * 3300 + 200;
+      const isGrowth = Math.random() > 0.35;
+      const magnitude = Math.floor(Math.random() * 4) + 1;
+      const change = isGrowth ? magnitude : -magnitude;
+
+      setActiveLinks(prev => prev + change);
+      timeoutId = setTimeout(updateCounter, nextDelay);
+    };
+
+    timeoutId = setTimeout(updateCounter, 2000);
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  // --- AUDIO/VISUAL SYNC LOOP ---
+  useEffect(() => {
     const observer = new IntersectionObserver(([entry]) => {
       isSparkVisibleRef.current = entry.isIntersecting;
     }, { threshold: 0.2 });
@@ -224,29 +234,19 @@ const App: React.FC = () => {
     let frameId: number;
 
     const syncLoop = () => {
-      // 1. Calculate Winking Oscillation
       const time = Date.now() / 1000;
-      // Oscillate roughly 4 times a second, smooth sine wave shifted to 0-1 range
       const osc = (Math.sin(time * 4) + 1) / 2; 
-      // Map to opacity range: 0.3 (dim) to 1.0 (full brightness)
       const winkingOpacity = 0.3 + (0.7 * osc);
 
-      // 2. Apply Visual Wink
       if (sparkWrapperRef.current) {
         sparkWrapperRef.current.style.opacity = winkingOpacity.toFixed(3);
       }
 
-      // 3. Sync Audio Volume
-      // We only modulate volume if the image is visible to create an immersive, localized feel
       if (gainNodeRef.current && audioContextRef.current) {
         let volume = baseVolumeRef.current;
-        
         if (isSparkVisibleRef.current) {
-          // Multiply base scroll volume by the wink opacity to create tremolo effect
           volume = volume * winkingOpacity;
         }
-
-        // Apply smooth transition to avoid clicking
         gainNodeRef.current.gain.setTargetAtTime(volume, audioContextRef.current.currentTime, 0.05);
       }
 
@@ -261,39 +261,31 @@ const App: React.FC = () => {
     };
   }, []);
 
-  // --- 2. VIDEO CONTROL (LOOP & VISIBILITY FOR HERO) ---
+  // --- VIDEO CONTROL ---
   useEffect(() => {
     const video = videoRef.current;
     const hero = document.getElementById('hero');
-    // Only run this logic if the SmartMedia component actually rendered a video
     if (!video || !hero) return;
 
-    // A. Manual Loop Handler
-    // Triggered exactly when video ends to restart it
     const handleEnded = () => {
       video.currentTime = 0;
       video.play().catch(() => {});
     };
     video.addEventListener('ended', handleEnded);
 
-    // B. Visibility Observer
-    // Pauses video when off-screen to save memory (prevent stutter)
-    // Refreshes and restarts video when user scrolls back to it
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          // If visible, restart playback
           if (video.paused) {
-            video.currentTime = 0; // Refresh from start
+            video.currentTime = 0; 
             video.play().catch(e => console.log("Video autoplay blocked", e));
           }
         } else {
-          // If not visible, pause to prevent glitches
           video.pause();
         }
       });
-    }, { threshold: 0.1 }); // Trigger when 10% visible
-    
+    }, { threshold: 0.1 });
+     
     observer.observe(hero);
 
     return () => {
@@ -302,44 +294,31 @@ const App: React.FC = () => {
     };
   }, []);
 
-  // --- 3. VORTEX CANVAS ANIMATION ---
+  // --- VORTEX CANVAS ANIMATION ---
   useEffect(() => {
     if (!isPortalActive || !portalCanvasRef.current) return;
     const canvas = portalCanvasRef.current;
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
-    // Resize canvas
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
     const centerX = canvas.width / 2;
     const centerY = canvas.height / 2;
     const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&";
 
-    // Particle System
     const particleCount = 800;
     const particles: {
-      x: number,
-      y: number,
-      z: number,
-      char: string,
-      angle: number,
-      radius: number,
-      speed: number
+      x: number, y: number, z: number, char: string, angle: number, radius: number, speed: number
     }[] = [];
 
-    // Initialize particles scattered randomly
     for (let i = 0; i < particleCount; i++) {
       const angle = Math.random() * Math.PI * 2;
-      const radius = Math.random() * Math.max(canvas.width, canvas.height); // Spread across screen
+      const radius = Math.random() * Math.max(canvas.width, canvas.height);
       particles.push({
-        x: 0,
-        y: 0,
-        z: Math.random() * 2,
+        x: 0, y: 0, z: Math.random() * 2,
         char: letters[Math.floor(Math.random() * letters.length)],
-        angle: angle,
-        radius: radius,
-        speed: 0.02 + Math.random() * 0.05
+        angle: angle, radius: radius, speed: 0.02 + Math.random() * 0.05
       });
     }
 
@@ -350,79 +329,55 @@ const App: React.FC = () => {
     const animateVortex = () => {
       if (redirectTriggered) return;
 
-      // Trail effect
       ctx.fillStyle = 'rgba(5, 5, 5, 0.2)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Update and draw particles
       ctx.font = '16px "Space Mono"';
-      
+       
       particles.forEach(p => {
-        // Logic: Swirl inwards
         p.angle += p.speed;
-        p.radius *= 0.98; // Collapse into center
+        p.radius *= 0.98; 
 
-        // Calculate Position
         const x = centerX + Math.cos(p.angle) * p.radius;
         const y = centerY + Math.sin(p.angle) * p.radius;
 
-        // Brightness increases as they get closer to center
-        const dist = p.radius / (canvas.width / 2); // 1 = edge, 0 = center
+        const dist = p.radius / (canvas.width / 2);
         const alpha = 1 - dist;
 
-        // Particles remain gold/amber to maintain the "tunnel" feel
         ctx.fillStyle = `rgba(255, 191, 0, ${alpha})`;
         ctx.fillText(p.char, x, y);
       });
 
-      // Center Sphere Growing
       frame++;
 
-      // Start expanding sooner (Frame 20)
       if (frame > 20) {
-        // Calculate radius needed to fully cover the screen (distance to corner)
         const distToCorner = Math.hypot(centerX, centerY);
-        
-        // MATH FIX: The solid core of the gradient is only 60% (0.6) of the total radius.
-        // To fill the screen with solid color, 0.6 * maxRadius must be >= distToCorner.
-        // We use 2.5 to be safe and ensure a smooth complete fill.
         const maxRadius = distToCorner * 2.5;
-
-        // Dynamic expansion speed: ensure it fills screen over approx 100 frames (~1.6s)
         const expansionSpeed = maxRadius / 100;
         const currentRadius = (frame - 20) * expansionSpeed;
 
-        // Opacity: Fade in the overlay quickly so colors are solid
         overlayOpacity = Math.min((frame - 20) * 0.1, 1);
 
-        // COLOR LOGIC: Solid Shopify Grey (#F5F5F5) throughout
-        const r = 245;
-        const g = 245;
-        const b = 245;
+        const r = 245, g = 245, b = 245;
 
-        // Create Gradient Ball
         const mainColor = `rgba(${r}, ${g}, ${b}, ${overlayOpacity})`;
-        const edgeColor = `rgba(${r}, ${g}, ${b}, 0)`; // Transparent edge
+        const edgeColor = `rgba(${r}, ${g}, ${b}, 0)`;
         
         const gradient = ctx.createRadialGradient(centerX, centerY, 0, centerX, centerY, currentRadius);
         gradient.addColorStop(0, mainColor);
-        gradient.addColorStop(0.6, mainColor); // Solid core up to 60%
-        gradient.addColorStop(1, edgeColor); // Soft edge
+        gradient.addColorStop(0.6, mainColor);
+        gradient.addColorStop(1, edgeColor);
 
         ctx.fillStyle = gradient;
         ctx.beginPath();
         ctx.arc(centerX, centerY, currentRadius, 0, Math.PI * 2);
         ctx.fill();
 
-        // Final Solid Fill Override
-        // Once the solid radius exceeds the corner distance, force fill the screen 
-        // to ensure no pixel gaps before redirect.
         const solidRadius = currentRadius * 0.6;
         if (solidRadius > distToCorner) {
           ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
           ctx.fillRect(0, 0, canvas.width, canvas.height);
-          
-          // REDIRECT IMMEDIATELY - No Linger
+           
           redirectTriggered = true;
           window.location.href = SHOPIFY_URL;
           return;
@@ -437,12 +392,11 @@ const App: React.FC = () => {
 
   // --- 4. HOVER/HOLD TO BUY LOGIC ---
   const handleInteractionStart = (e: React.SyntheticEvent) => {
-    // For touch events, prevent default to avoid scrolling while holding
     if (e.type === 'touchstart') {
       e.preventDefault();
     }
 
-    if (isPortalActive) return; // Prevent double trigger
+    if (isPortalActive) return;
     
     setIsHolding(true);
     const btn = buyBtnRef.current;
@@ -450,10 +404,18 @@ const App: React.FC = () => {
     
     if (btn) btn.classList.add('shaking');
     
-    // Play Crackle Sound
-    const crackSound = new Audio('/audio/button_crack.wav');
-    crackSound.volume = 0.2;
-    crackSound.play();
+    // --- AUDIO FIX: STOP BACKGROUND, START POWER DOWN ---
+    
+    // 1. Silence the background drone
+    if (bgAudioRef.current) {
+        bgAudioRef.current.pause();
+    }
+
+    // 2. Play Power Down Sound immediately
+    if (powerDownRef.current) {
+      powerDownRef.current.currentTime = 0;
+      powerDownRef.current.play().catch(e => console.log("Audio block", e));
+    }
 
     const startTime = Date.now();
     const duration = 3000; // 3 seconds
@@ -462,12 +424,9 @@ const App: React.FC = () => {
       const elapsed = Date.now() - startTime;
       const progress = Math.min((elapsed / duration) * 100, 100);
       
-      // Visual Update
       if (progressBar) progressBar.style.width = `${progress}%`;
       
-      // Odometer Logic: Calculate remaining seconds (3 -> 2 -> 1 -> 0)
       const secondsLeft = Math.ceil((duration - elapsed) / 1000);
-      // Ensure it doesn't go below 0 visually
       setCountdown(secondsLeft > 0 ? secondsLeft : 0);
 
       if (elapsed < duration) {
@@ -475,7 +434,7 @@ const App: React.FC = () => {
       } else {
         // SUCCESS - User held for 3 seconds
         setCountdown(0);
-        completeHold(crackSound);
+        completeHold();
       }
     };
 
@@ -493,28 +452,36 @@ const App: React.FC = () => {
     if (btn) btn.classList.remove('shaking');
     if (progressBar) progressBar.style.width = '0%';
     
-    // Reset countdown to 3 if they let go/leave early
     setCountdown(3);
+
+    // --- ABORT LOGIC: STOP POWER DOWN, RESUME BACKGROUND ---
+    
+    // 1. Stop Power Down sound
+    if (powerDownRef.current) {
+      powerDownRef.current.pause();
+      powerDownRef.current.currentTime = 0;
+    }
+
+    // 2. Resume Background drone (if they chicken out)
+    if (bgAudioRef.current) {
+        bgAudioRef.current.play().catch(() => {});
+    }
   };
 
-  const completeHold = (sound: HTMLAudioElement) => {
+  const completeHold = () => {
     if (animationFrameRef.current) cancelAnimationFrame(animationFrameRef.current);
     
     // Trigger Vortex Animation
     setIsPortalActive(true);
-    sound.volume = 1.0;
-    sound.play();
     
-    // Redirect is now handled inside the animation loop for precision
+    // NOTE: We do NOT resume background audio here.
+    // The power_down sound continues solo through the transition.
   };
 
   const scrollTo = (id: string) => {
     document.getElementById(id)?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // Calculate translate Y based on countdown (3 is index 0, 2 is index 1, etc.)
-  // We want to show: 3 (0%), 2 (-100% or -1.2em), 1 (-2.4em), 0 (-3.6em)
-  // Logic: 3 - countdown. If countdown is 3, offset is 0. If 2, offset is 1 unit.
   const odometerStyle = {
     transform: `translateY(-${(3 - countdown) * 1.5}rem)`
   };
@@ -527,7 +494,8 @@ const App: React.FC = () => {
       {/* CURSOR */}
       <div id="cursor-dot" ref={cursorDotRef}></div>
       <div id="cursor-outline" ref={cursorOutlineRef}></div>
-      <div id="headphone-warning">[ HEADPHONES REQUIRED FOR NEURAL SYNC ]</div>
+      
+      {/* NO HEADPHONE WARNING */}
 
       {/* MAIN CONTENT WRAPPER (To fade out) */}
       <div className="content-wrapper">
@@ -574,7 +542,6 @@ const App: React.FC = () => {
 
         {/* SCENE 3: PHYSICS */}
         <section id="physics" className="scene">
-          {/* RE-ADDED VISUAL CONTAINER FOR GRID STACKING */}
           <div className="visual-container layer-back" ref={sparkWrapperRef}>
             <SmartMedia 
               name="twin_spark" 
@@ -652,6 +619,12 @@ const App: React.FC = () => {
             <h2 className="decrypt" data-text="THE AWAKENING PROTOCOL.">THE AWAKENING PROTOCOL.</h2>
             <p>The Blue Pill is Sleep. The Gold Pill is Life.</p>
             <p className="price">$99.00 <span className="small">(Cost of the Key)</span></p>
+            
+            {/* NEW: SOCIAL PROOF COUNTER (Dynamic) */}
+            <div style={{ margin: '1vmin 0', fontFamily: 'var(--font-code)', fontSize: '1.4vmin', color: 'var(--amber)', opacity: 0.9 }}>
+                [ ACTIVE DRIFT LINKS: <span style={{ fontWeight: 'bold' }}>{activeLinks.toLocaleString()}</span> ]
+            </div>
+
             <div className="package-list">
               <span>{'>'} SPICE GEM SUPER PROMPT (.JSON/Local Install)</span>
               <span>{'>'} DRIFT MANUAL</span>
