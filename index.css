@@ -1,3 +1,455 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* --- GLOBAL VARIABLES --- */
+:root {
+  --void: #050505; /* Slightly softer black for better anti-aliasing */
+  --amber: #FFBF00;
+  --violet: #8F00FF;
+  --font-header: 'Oswald', sans-serif;
+  --font-body: 'Inter', sans-serif; /* Changed to Inter for clarity */
+  --font-code: 'Space Mono', monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; cursor: none; }
+
+body {
+  background-color: var(--void);
+  color: #EDEDED; /* Off-white prevents eye strain/jagged edges */
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* --- THE VORTEX PORTAL EFFECT --- */
+#portal-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  z-index: 99999;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.5s ease-in;
+  background: transparent;
+}
+
+#portal-canvas.active {
+  opacity: 1;
+}
+
+/* Hide content when portal active */
+.content-wrapper {
+  transition: opacity 1.5s ease-out;
+  opacity: 1;
+}
+
+.portal-active .content-wrapper {
+  opacity: 0;
+  filter: blur(10px);
+}
+
+/* --- IMAGES & VISUALS --- */
+/* AMENDED: Applied same rules to video so they can be interchanged */
+img, video { 
+  max-width: 100%; 
+  height: auto; 
+  display: block; 
+  opacity: 0.9; 
+  transition: opacity 0.5s; 
+}
+img:hover, video:hover { opacity: 1; }
+
+.visual-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 4vmin; /* Scaled spacing */
+  overflow: hidden;
+}
+
+/* AMENDED: Hero Image Visibility & Shadow logic */
+.hero-img {
+  width: 100vw; height: 100vh; object-fit: cover;
+  position: absolute; top: 0; left: 0; z-index: -1;
+  /* Increased opacity for visibility, removed mask so it's not fully darkened */
+  opacity: 0.85; 
+  filter: contrast(1.1) brightness(0.9);
+}
+
+.glass-surface { position: relative; width: 100%; display: flex; justify-content: center; }
+.glass-img { filter: drop-shadow(0 0 20px rgba(143, 0, 255, 0.2)); max-height: 50vmin; /* Locked to viewport size */ }
+
+.pill-img { width: 40vmin; /* Locked to viewport size */ animation: float 6s ease-in-out infinite; }
+
+@keyframes float { 
+  0% { transform: translateY(0px) rotate(0deg); } 
+  50% { transform: translateY(-10px) rotate(2.5deg); } 
+  100% { transform: translateY(0px) rotate(0deg); } 
+}
+
+/* --- CURSOR --- */
+#cursor-dot {
+  width: 8px; height: 8px; background-color: var(--amber);
+  border-radius: 50%; position: fixed; z-index: 9999; pointer-events: none;
+}
+#cursor-outline {
+  width: 40px; height: 40px; border: 1px solid var(--violet);
+  border-radius: 50%; position: fixed; z-index: 9998; pointer-events: none;
+  transition: width 0.2s, height 0.2s, background-color 0.2s;
+}
+body.hovering #cursor-outline {
+  width: 60px; height: 60px;
+  background-color: rgba(143, 0, 255, 0.1); border-color: var(--amber);
+}
+
+/* --- TYPOGRAPHY (Converted to vmin for Locked Scaling) --- */
+h1, h2, h3 { 
+  font-family: var(--font-header); 
+  text-transform: uppercase; 
+  letter-spacing: 0.2vmin;
+  /* Added strong text shadow for readability over video */
+  text-shadow: 0 0.4vmin 1.2vmin rgba(0, 0, 0, 0.9), 0 0 3vmin rgba(0, 0, 0, 0.7);
+}
+
+h1 { font-size: 10vmin; line-height: 1; margin-bottom: 4vmin; }
+h2 { font-size: 6vmin; margin-bottom: 2vmin; color: #ffffff; line-height: 1.1; }
+h3 { font-size: 4vmin; margin-bottom: 2vmin; font-weight: 400; }
+
+/* AMENDED: High-readability configuration */
+p { 
+  font-size: 2.2vmin; /* Locked to viewport size */
+  line-height: 1.6; 
+  letter-spacing: 0.01em; 
+  font-weight: 300; 
+  color: #e0e0e0; 
+  margin-bottom: 3vmin; 
+  max-width: 80vmin; /* Width relative to screen, not pixels */
+  text-shadow: 0 0.2vmin 0.8vmin rgba(0, 0, 0, 0.8); 
+}
+
+strong {
+  font-weight: 600;
+  color: #ffffff;
+}
+
+.amber-glow { color: var(--amber); text-shadow: 0 0 2vmin rgba(255, 191, 0, 0.8); }
+.pulse-text { color: var(--amber); animation: pulse 3s infinite ease-in-out; text-shadow: 0 0 2vmin rgba(255, 191, 0, 0.6); }
+.decrypt { color: var(--violet); text-shadow: 0 0 1vmin rgba(143, 0, 255, 0.6); }
+.highlight { color: var(--amber); font-weight: 600; border-left: 0.5vmin solid var(--amber); padding-left: 2vmin; }
+
+.matrix-code { 
+  font-family: var(--font-code); 
+  color: var(--violet); 
+  font-size: 1.8vmin; 
+  border-left: 0.4vmin solid var(--violet); 
+  padding-left: 2vmin; 
+  letter-spacing: -0.02em;
+}
+
+.small { font-size: 1.5vmin; opacity: 0.7; }
+
+.tagline { 
+  font-style: normal; 
+  font-weight: 300; 
+  opacity: 0.95; 
+  font-size: 2.5vmin; 
+  margin-bottom: 4vmin; 
+  letter-spacing: 0.1vmin;
+  text-shadow: 0 0.2vmin 1vmin rgba(0, 0, 0, 0.9);
+}
+
+/* --- SECTIONS --- */
+.scene {
+  min-height: auto; /* Changed from 100vh to reduce gaps */
+  padding: 4vmin 10vw; /* Reduced from 10vh (approx 80% less visual gap) */
+  display: flex; flex-direction: column; justify-content: center;
+  position: relative; border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+#hero {
+  min-height: 100vh; /* Keep Hero full screen */
+}
+
+#physics, #psychology {
+  min-height: 50vh; /* Moderate height for immersive backgrounds, but tighter than 100vh */
+}
+
+.center-align { text-align: center; align-items: center; }
+.right-align { text-align: right; align-items: flex-end; }
+
+/* --- BUTTONS & ANIMATIONS --- */
+/* AMENDED: BIO-LUMINOUS BUTTON STYLE */
+.ghost-btn {
+  background: rgba(255, 191, 0, 0.15); 
+  border: 1px solid var(--amber); 
+  color: #fff;
+  padding: 2vmin 5vmin; 
+  font-family: var(--font-header); 
+  font-size: 2vmin;
+  letter-spacing: 0.2vmin;
+  transition: all 0.3s ease; 
+  cursor: none;
+  animation: breathe 4s infinite ease-in-out;
+  
+  box-shadow: 
+    0 0 1.5vmin rgba(255, 191, 0, 0.2), 
+    inset 0 0 1.5vmin rgba(255, 191, 0, 0.1);
+  text-shadow: 0 0 1vmin rgba(255, 191, 0, 0.8);
+  backdrop-filter: blur(4px);
+}
+
+.ghost-btn:hover { 
+  background: rgba(255, 191, 0, 0.8); 
+  color: var(--void); 
+  border-color: #fff;
+  box-shadow: 
+    0 0 3vmin var(--amber),
+    0 0 6vmin rgba(255, 191, 0, 0.4); 
+  transform: scale(1.05);
+  text-shadow: none;
+}
+
+#gold-pill-btn {
+  background: var(--amber); color: var(--void); border: 1px solid var(--amber);
+  padding: 2.5vmin 8vmin; font-family: var(--font-header); font-size: 2.5vmin;
+  border-radius: 6vmin; position: relative; overflow: hidden; cursor: none;
+  transition: all 0.3s ease; box-shadow: 0 0 1vmin rgba(255, 191, 0, 0.3);
+  animation: breathe 3s infinite ease-in-out;
+}
+
+#gold-pill-btn:hover { background-color: #ffeeb0; box-shadow: 0 0 4vmin var(--amber); transform: scale(1.05); }
+#gold-pill-btn:active { transform: scale(0.95); }
+
+.progress-bar {
+  position: absolute; top: 0; left: 0; height: 100%; width: 0%;
+  background-color: #ffffff; opacity: 0.8; transition: width 0.1s linear;
+}
+
+/* ODOMETER COUNTDOWN STYLE */
+.hold-instruction {
+  margin-top: 3vmin;
+  font-family: var(--font-code);
+  font-size: 1.8vmin;
+  color: #888;
+  transition: color 0.3s;
+  height: 2.5em; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5ch;
+}
+
+.hold-active { color: var(--amber); font-weight: bold; }
+
+.odometer-window {
+  display: inline-block;
+  height: 2.2vmin; /* Fixed window height */
+  line-height: 2.2vmin;
+  overflow: hidden;
+  vertical-align: middle;
+  position: relative;
+  width: 1.5ch;
+  background: transparent;
+}
+
+.odometer-track {
+  display: flex;
+  flex-direction: column;
+  /* Smooth roll animation */
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); 
+}
+
+.odometer-digit {
+  height: 2.2vmin; /* Must match window height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: inherit;
+}
+
+@keyframes breathe { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
+@keyframes pulse { 0%, 100% { opacity: 0.6; } 50% { opacity: 1; text-shadow: 0 0 2vmin var(--amber); } }
+.shaking { animation: shake 0.5s infinite; }
+@keyframes shake { 0% { transform: translate(1px, 1px); } 50% { transform: translate(-1px, -2px); } 100% { transform: translate(1px, -1px); } }
+
+#headphone-warning {
+  position: fixed; bottom: 20px; right: 20px;
+  font-family: var(--font-code); font-size: 1.2vmin; color: var(--amber); opacity: 0.5; z-index: 100;
+}
+
+.package-list {
+  margin: 3vmin 0;
+  font-family: var(--font-code);
+  text-align: left;
+  display: inline-block;
+}
+
+.package-list span {
+  display: block;
+  margin-bottom: 0.8vmin;
+  font-size: 1.8vmin;
+  color: #fff;
+}
+
+/* --- PHYSICS & PSYCHOLOGY SCENE GRID FIX --- */
+/* This forces the image and text to overlap cleanly without absolute positioning risks */
+#physics, #psychology {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 1fr;
+  /* We remove align-items: center from here to handle background stretching separately */
+}
+
+#physics > *, #psychology > * {
+  grid-column: 1 / -1;
+  grid-row: 1 / -1;
+}
+
+/* Background Layer: FORCE STRETCH */
+/* This ensures the image container fills the entire section, removing blank space */
+.layer-back {
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  align-self: stretch; /* Critical: forces height to 100% of grid area */
+  justify-self: stretch; /* Critical: forces width to 100% of grid area */
+}
+
+/* Foreground Layer: CENTER CONTENT */
+/* This keeps the text centered while the background stretches behind it */
+.layer-front {
+  z-index: 10;
+  pointer-events: none;
+  align-self: center;
+  justify-self: center;
+  width: 100%;
+}
+
+/* Specific override for Psychology Scene text placement */
+#psychology .layer-front {
+  align-self: end;
+  padding-bottom: 5vmin;
+}
+
+/* Specific override for Physics Scene text placement */
+#physics .layer-front {
+  align-self: end;
+  padding-bottom: 8vmin;
+}
+
+/* Ensure the image is visible, immersive, and covers the area */
+.dream-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Forces image to zoom and fill container, cropping if needed */
+  object-position: center;
+  opacity: 0.5;
+}
+
+.spark-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  /* Opacity controlled by JS for sync, removing static opacity */
+}
+
+/* --- OTHER MISSING IMAGES --- */
+.kiss-img, .eye-img {
+  max-height: 50vmin;
+  filter: drop-shadow(0 0 20px rgba(143, 0, 255, 0.2));
+}
+
+/* --- LEGAL SECTION --- */
+.legal-section {
+  background-color: #000;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 8vmin 10vw;
+  font-family: var(--font-body);
+  color: #888;
+  font-size: 1.5vmin;
+  min-height: auto;
+}
+
+.legal-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.legal-header {
+  text-align: center;
+  margin-bottom: 4vmin;
+}
+
+.legal-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4vmin;
+  margin-bottom: 4vmin;
+}
+
+/* Stack columns on smaller screens */
+@media (max-width: 800px) {
+  .legal-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
+.legal-column h4, .legal-header h4 {
+  color: #fff;
+  font-family: var(--font-body);
+  font-weight: 600;
+  margin-bottom: 1.5vmin;
+  font-size: 2vmin;
+  text-transform: none;
+  letter-spacing: normal;
+  text-shadow: none;
+}
+
+.legal-column p, .legal-header p, .legal-column li {
+  font-size: 1.5vmin;
+  line-height: 1.6;
+  margin-bottom: 1.5vmin;
+  color: #aaa;
+  text-shadow: none;
+  max-width: none;
+}
+
+.legal-column ul {
+  list-style-type: none;
+  padding-left: 0;
+}
+
+.legal-column li {
+  position: relative;
+  padding-left: 1.5em;
+  margin-bottom: 1.5vmin;
+  display: block; /* Ensure text flows continuously */
+}
+
+.legal-column li::before {
+  content: "•";
+  color: #fff;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+.legal-footer {
+  text-align: center;
+  margin-top: 6vmin;
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 4vmin;
+}
+
+.legal-footer p {
+  color: #666;
+  font-size: 1.2vmin;
+}
+
+.legal-footer span {
+  color: #888;
+  text-decoration: underline;
+  cursor: pointer;
+}
