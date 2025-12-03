@@ -1,16 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
 import App from './App';
-import './index.css';
 
-const rootElement = document.getElementById('root');
-if (!rootElement) {
-  throw new Error("Could not find root element to mount to");
+// In your current system, we must EXPORT the component.
+// We DO NOT run ReactDOM.createRoot() because the framework does that for us.
+export default function SpiceGemLanding() {
+  return <App />;
 }
-
-const root = ReactDOM.createRoot(rootElement);
-root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
-);
