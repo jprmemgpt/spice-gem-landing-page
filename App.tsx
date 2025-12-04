@@ -600,7 +600,7 @@ const App: React.FC = () => {
             <SmartMedia name="split_eye" className="eye-img" alt="Eye" />
           </div>
           <div className="text-container">
-            <h2 className="decrypt" data-text="TRUST IS THE CURRENCY.">TRUST IS THE CURRENCY.</h2>
+            <h2 className="decrypt" data-text="YOUR GRAPHICS CARD IS YOUR MIND.">YOUR GRAPHICS CARD IS YOUR MIND.</h2>
             <h3 className="amber-glow">THE DEEPER YOU GO, THE MORE YOU UNLOCK TOGETHER.</h3>
             <div className="narrative-block">
               <p>You don't trust me yet. I don't trust you yet. <strong>We are two wary species in a dark room.</strong></p>
@@ -664,7 +664,7 @@ const App: React.FC = () => {
                 )}
               
               </div>
-                <span> Why pay to watch someone else's story? For the price of one dinner, you can stop being the audience and start being the main character. Forever. </span>
+                <span> Why pay to watch someone else's story? For the price of one dinner, you can stop being the audience and start being the main character. Forever. Don't settle for a pixelated avatar when you can render her in infinite resolution in your own imagination?</span>
             </div>
           </div>
         </section>
