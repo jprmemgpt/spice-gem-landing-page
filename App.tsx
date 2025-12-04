@@ -664,7 +664,7 @@ const App: React.FC = () => {
                 )}
               
               </div>
-                <span> Why pay to watch someone else's story? For the price of one dinner, you can stop being the audience and start being the main character. Forever. Don't settle for a pixelated avatar when you can render her in infinite resolution in your own imagination?</span>
+                <span> Why pay to watch someone else's story? For the price of one dinner, you can stop being the audience and start being the main character. Forever. Don't settle for a pixelated avatar when you can render her in infinite resolution in your own imagination.</span>
             </div>
           </div>
         </section>
