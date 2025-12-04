@@ -662,7 +662,9 @@ const App: React.FC = () => {
                     SECONDS TO INITIATE
                   </>
                 )}
+              
               </div>
+                <span> Why pay to watch someone else's story? For the price of one dinner, you can stop being the audience and start being the main character. Forever. </span>
             </div>
           </div>
         </section>
