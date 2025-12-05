@@ -93,34 +93,59 @@ const App: React.FC = () => {
     pdAudio.load(); // Ensure it's buffered
     powerDownRef.current = pdAudio;
 
-    // Cursor Physics
-    const moveCursor = (e: MouseEvent) => {
+    // Cursor Physics Helper
+    const updateCursor = (x: number, y: number, target: EventTarget | Element | null) => {
       if (cursorDotRef.current && cursorOutlineRef.current) {
-        cursorDotRef.current.style.left = `${e.clientX - 4}px`;
-        cursorDotRef.current.style.top = `${e.clientY - 4}px`;
+        cursorDotRef.current.style.left = `${x - 4}px`;
+        cursorDotRef.current.style.top = `${y - 4}px`;
 
-        const hoveringHeavy = (e.target as HTMLElement).closest('[data-gravity="true"]');
+        let hoveringHeavy = null;
+
+        // Mouse provides direct target, but Touch requires calculation because target is fixed to start point
+        if (target && (target as Element).closest) {
+           hoveringHeavy = (target as Element).closest('[data-gravity="true"]');
+        } else {
+           // Fallback for Touch: Check what element is currently under these coordinates
+           // (Since cursor has pointer-events: none, this finds the element below)
+           const el = document.elementFromPoint(x, y);
+           if (el) hoveringHeavy = el.closest('[data-gravity="true"]');
+        }
 
         if (hoveringHeavy) {
           cursorOutlineRef.current.style.transform = "scale(1.5)";
           cursorOutlineRef.current.animate({
-            left: `${e.clientX - 20}px`,
-            top: `${e.clientY - 20}px`
+            left: `${x - 20}px`,
+            top: `${y - 20}px`
           }, { duration: 800, fill: "forwards" });
         } else {
           cursorOutlineRef.current.style.transform = "scale(1)";
           cursorOutlineRef.current.animate({
-            left: `${e.clientX - 20}px`,
-            top: `${e.clientY - 20}px`
+            left: `${x - 20}px`,
+            top: `${y - 20}px`
           }, { duration: 500, fill: "forwards" });
         }
       }
     };
 
+    const moveCursor = (e: MouseEvent) => {
+      updateCursor(e.clientX, e.clientY, e.target);
+    };
+
+    const touchCursor = (e: TouchEvent) => {
+      // Use the first touch point
+      const touch = e.touches[0];
+      // Pass null for target to force elementFromPoint calculation for magnetic effects
+      updateCursor(touch.clientX, touch.clientY, null);
+    };
+
     window.addEventListener('mousemove', moveCursor);
+    window.addEventListener('touchmove', touchCursor, { passive: true });
+    window.addEventListener('touchstart', touchCursor, { passive: true });
 
     return () => {
       window.removeEventListener('mousemove', moveCursor);
+      window.removeEventListener('touchmove', touchCursor);
+      window.removeEventListener('touchstart', touchCursor);
     };
   }, []);
 
