@@ -229,6 +229,7 @@ body {
 }
 
 .log-body strong {
+  font-weight: 600;
   color: var(--amber);
 }
 
@@ -420,6 +421,13 @@ strong {
   border-radius: 6vmin; position: relative; overflow: hidden; cursor: none;
   transition: all 0.3s ease; box-shadow: 0 0 1vmin rgba(255, 191, 0, 0.3);
   animation: breathe 3s infinite ease-in-out;
+  
+  /* ANDROID / IOS HARDENING */
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 #gold-pill-btn:hover { background-color: #ffeeb0; box-shadow: 0 0 4vmin var(--amber); transform: scale(1.05); }
