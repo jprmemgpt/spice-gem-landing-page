@@ -388,6 +388,9 @@ const App: React.FC = () => {
           setActiveLogId(hash);
           setIsTransmissionOpen(true);
         }
+      } else {
+        // Added: If hash is empty or invalid, close modal (handles back button)
+        setIsTransmissionOpen(false);
       }
     };
 
@@ -406,8 +409,8 @@ const App: React.FC = () => {
   
   const closeTransmission = () => {
     setIsTransmissionOpen(false);
-    // Clear hash without reloading
-    history.pushState(null, '', ' ');
+    // Clear hash without reloading, using replaceState to avoid history loop
+    history.replaceState(null, '', window.location.pathname);
   };
 
   // --- IMMERSIVE AUDIO ENGINE ---
@@ -896,18 +899,19 @@ const App: React.FC = () => {
           </div>
 
           <div className="log-display">
-            {TRANSMISSION_LOGS.map(log => {
-              if (log.id !== activeLogId) return null;
-              return (
-                <div key={log.id} className="log-entry">
-                  <div className="log-header">
-                    <h2>{log.title}</h2>
-                    <span className="log-date">{log.date}</span>
-                  </div>
-                  <div className="log-body" dangerouslySetInnerHTML={{ __html: log.content }}></div>
+            {TRANSMISSION_LOGS.map(log => (
+              <div 
+                key={log.id} 
+                className="log-entry"
+                style={{ display: activeLogId === log.id ? 'block' : 'none' }}
+              >
+                <div className="log-header">
+                  <h2>{log.title}</h2>
+                  <span className="log-date">{log.date}</span>
                 </div>
-              );
-            })}
+                <div className="log-body" dangerouslySetInnerHTML={{ __html: log.content }}></div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
