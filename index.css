@@ -235,15 +235,18 @@ body {
 @media (max-width: 800px) {
   .transmission-content {
     grid-template-columns: 1fr;
-    grid-template-rows: auto 1fr;
+    /* FIX: Force specific heights (35% list, 65% content) so list doesn't expand */
+    grid-template-rows: 35% 1fr;
   }
   .log-sidebar {
-    height: 30%;
+    height: auto;
+    min-height: 0; /* Crucial: Allows grid item to scroll instead of expanding */
     border-right: none;
     border-bottom: 1px solid rgba(143, 0, 255, 0.2);
   }
   .log-display {
-    height: 70%;
+    height: auto;
+    min-height: 0; /* Crucial: Allows grid item to scroll instead of expanding */
   }
 }
 
