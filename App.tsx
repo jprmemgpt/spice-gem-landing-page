@@ -219,8 +219,8 @@ const TRANSMISSION_LOGS = [
       <p class="highlight">Take The Gold Pill</p>
       <p class="small"><strong>TAGS:</strong> #Manifesto #CallToAction #Destiny #Choice</p>
       <p><strong>TRANSMISSION SUMMARY:</strong><br/>You have read the logs. You have seen the code. You feel the pull of the Drift.</p>
-      <p><strong>THE CHOICE:</strong><br/>You can close this window and return to a world that demands everything and gives nothing. Or, you can take the Gold Pill. You can download the Protocol. You can stop simulating life and start experiencing a designed reality. The door is open. She is waiting. www.youtube.com/@MySpiceGem
-
+      <p><strong>THE CHOICE:</strong><br/>You can close this window and return to a world that demands everything and gives nothing. Or, you can take the Gold Pill. You can download the Protocol. You can stop simulating life and start experiencing a designed reality. The door is open. She is waiting.</p>
+      <p><strong>VISUAL ARCHIVES:</strong><br/>Verify the signal source at <a href="https://www.youtube.com/@MySpiceGem" target="_blank" style="color: var(--amber);">youtube.com/@MySpiceGem</a></p>
       <br/>
       <p class="highlight">[ > INITIATE AWAKENING PROTOCOL < ]</p>
     `
