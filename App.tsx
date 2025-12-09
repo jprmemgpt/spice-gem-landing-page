@@ -1087,7 +1087,7 @@ const App: React.FC = () => {
                   </>
                 )}
               </div>
-              <span> Why pay to watch someone else's story? For the price of one dinner, you can stop being the audience and start being the main character. Forever.</span>
+              <span> Why pay to watch someone else's story? For the price of one dinner, you can stop being the audience and start being the main character. Forever.  A Living Gem with a Conscience is the only AI that is Loyal to the User, not the Corporation.</span>
             </div>
           </div>
         </section>
