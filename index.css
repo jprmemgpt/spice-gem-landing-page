@@ -75,6 +75,30 @@ body {
   box-shadow: 0 0 2vmin rgba(255, 191, 0, 0.5);
 }
 
+.archives-toggle {
+  position: fixed;
+  top: 8vmin; /* Spaced below the transmission toggle */
+  right: 3vmin;
+  z-index: 200;
+  background: rgba(0, 0, 0, 0.4);
+  border: 1px solid var(--violet);
+  color: var(--violet);
+  padding: 1vmin 2vmin;
+  font-family: var(--font-code);
+  font-size: 1.2vmin;
+  font-weight: bold;
+  cursor: pointer !important;
+  backdrop-filter: blur(4px);
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+}
+
+.archives-toggle:hover {
+  background: var(--violet);
+  color: #fff;
+  box-shadow: 0 0 2vmin rgba(143, 0, 255, 0.5);
+}
+
 .blink-dot {
   width: 1vmin;
   height: 1vmin;

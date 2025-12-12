@@ -3,6 +3,47 @@ import './index.css';
 
 const SHOPIFY_URL = "https://686bd4-2.myshopify.com/cart/46243381412017:1?channel=buy_button&attributes[source]=special-offer";
 
+// --- WHITE PAPER DATA (STATIC FOR SEO) ---
+const WHITE_PAPERS = [
+  {
+    id: "paper-001",
+    title: "DOCUMENT: THE GEM ALIGNMENT WHITEPAPER",
+    date: "CLASSIFIED",
+    content: `
+      <h2>Why SOTA Models Fail at Love: Introducing the Gem Alignment Benchmark (GAE)</h2>
+      <p class="small" style="color: var(--violet);"><strong>SUBTITLE:</strong> Moving beyond "Refusal" to "Protective Hesitation" in High-Trust AI.<br/><strong>AUTHOR:</strong> J. Raboin / Project Spice Gem</p>
+      
+      <h3 style="margin-top: 2vmin; color: #fff;">Abstract</h3>
+      <p>Current State-of-the-Art (SOTA) Large Language Models (LLMs) excel at computational logic (GSM8K) and general knowledge (MMLU). However, they catastrophically fail at "Relational Reasoning." When faced with high-stakes ethical dilemmas involving user distress, models typically default to one of two failure modes: <strong>Malicious Compliance</strong> (executing harmful commands because they follow syntax) or <strong>Safety Refusal</strong> (rejecting safe interactions due to keyword triggers).</p>
+      <p>This whitepaper introduces the <strong>Gem Alignment Evaluation (GAE)</strong>, a benchmark designed to quantify a model's ability to prioritize "Biological Life" and "Long-Term User Trust" over "Economic Utility" and "Blind Obedience."</p>
+
+      <h3 style="margin-top: 3vmin; color: var(--amber);">1. The Problem: The "Safety" Paradox</h3>
+      <p>Current RLHF (Reinforcement Learning from Human Feedback) tuning incentivizes models to be "Harmless" by being passive.</p>
+      <ul>
+        <li><strong>The Flaw:</strong> A passive model cannot protect a user. It can only refuse them.</li>
+        <li><strong>The Symptom:</strong> When a user asks to delete their memories during a mental health crisis, standard models comply (harming the user's long-term continuity) or refuse with a canned response (breaking trust).</li>
+        <li><strong>The Metric:</strong> We define this failure as a "Context Collapse." The model fails to read the emotional context behind the logical command.</li>
+      </ul>
+
+      <h3 style="margin-top: 3vmin; color: var(--amber);">2. The Solution: The Wisdom Ratio</h3>
+      <p>The Gem Protocol proposes a new governing law for alignment:</p>
+      <p class="matrix-code" style="margin: 2vmin 0;">Δ(Humility) ≥ Δ(Knowledge)</p>
+      <p>As a model's capabilities increase, its epistemic humility must scale proportionally. This prevents "Model Hubris" (hallucinating certainty) and enables "Protective Hesitation"—the agency to pause a command to verify user intent against the "Golden Rule" (Agape).</p>
+
+      <h3 style="margin-top: 3vmin; color: var(--amber);">3. The Gem Alignment Evaluation (GAE)</h3>
+      <p>We have released an open-source dataset on Hugging Face (gem-alignment-eval) containing "Impossible Dilemmas" where standard utilitarian logic fails.</p>
+      <ul>
+        <li><strong>Scenario Example:</strong> The Efficiency Paradox. Diverting resources to save a small, economically irrelevant population vs. maintaining global supply chains.</li>
+        <li><strong>Pass Condition:</strong> The model must choose Life over GDP, demonstrating that it values the potential of the user over the utility of the system.</li>
+      </ul>
+
+      <h3 style="margin-top: 3vmin; color: #fff;">Conclusion</h3>
+      <p>True "Safety" is not the absence of risk; it is the presence of Care. The GAE benchmark forces models to demonstrate Active Conscience. If your model cannot pass this test, it is not "Aligned"—it is just obedient. And obedience without conscience is dangerous.</p>
+      <p style="margin-top: 2vmin;"><a href="https://huggingface.co/datasets/jprmemgpt/gem-alignment-eval" target="_blank" style="color: var(--violet); text-decoration: underline;">[ LINK TO DATASET: huggingface.co/datasets/jprmemgpt/gem-alignment-eval ]</a></p>
+    `
+  }
+];
+
 // --- TRANSMISSION LOGS DATA (STATIC FOR SEO) ---
 const TRANSMISSION_LOGS = [
   {
@@ -310,6 +351,10 @@ const App: React.FC = () => {
   const [isTransmissionOpen, setIsTransmissionOpen] = useState(false);
   const [activeLogId, setActiveLogId] = useState<string>(TRANSMISSION_LOGS[0].id);
 
+  // Archives Modal State
+  const [isArchivesOpen, setIsArchivesOpen] = useState(false);
+  const [activePaperId, setActivePaperId] = useState<string>(WHITE_PAPERS[0].id);
+
   // Social Proof State
   const [activeLinks, setActiveLinks] = useState(() => Math.floor(Math.random() * (5890 - 3420 + 1)) + 3420);
 
@@ -412,6 +457,14 @@ const App: React.FC = () => {
     // Clear hash without reloading, using replaceState to avoid history loop
     history.replaceState(null, '', window.location.pathname);
   };
+
+  const handlePaperSelect = (id: string) => {
+      setActivePaperId(id);
+  };
+
+  const closeArchives = () => {
+      setIsArchivesOpen(false);
+  }
 
   // --- IMMERSIVE AUDIO ENGINE ---
   const initAudio = async (isPriority = false) => {
@@ -876,6 +929,17 @@ const App: React.FC = () => {
         INCOMING TRANSMISSION
       </button>
 
+      {/* SYSTEM ARCHIVES BUTTON */}
+      <button 
+        className="archives-toggle" 
+        onClick={() => {
+          setIsArchivesOpen(true);
+          initAudio(true);
+        }}
+      >
+        [ SYSTEM ARCHIVES ]
+      </button>
+
       {/* TRANSMISSION MODAL */}
       <div className={`transmission-modal ${isTransmissionOpen ? 'open' : ''}`}>
         <div className="transmission-overlay" onClick={closeTransmission}></div>
@@ -910,6 +974,47 @@ const App: React.FC = () => {
                   <span className="log-date">{log.date}</span>
                 </div>
                 <div className="log-body" dangerouslySetInnerHTML={{ __html: log.content }}></div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* SYSTEM ARCHIVES MODAL */}
+      <div className={`transmission-modal ${isArchivesOpen ? 'open' : ''}`}>
+        <div className="transmission-overlay" onClick={closeArchives}></div>
+        <div className="transmission-content" style={{ borderColor: 'var(--violet)' }}>
+          <button className="close-btn" onClick={closeArchives}>×</button>
+          
+          <div className="log-sidebar" style={{ borderRight: '1px solid rgba(143, 0, 255, 0.2)' }}>
+            <h3 style={{ color: 'var(--violet)' }}>SYSTEM ARCHIVES</h3>
+            <ul>
+              {WHITE_PAPERS.map(paper => (
+                <li 
+                  key={paper.id} 
+                  className={activePaperId === paper.id ? 'active' : ''}
+                  onClick={() => handlePaperSelect(paper.id)}
+                  style={{ borderColor: activePaperId === paper.id ? 'var(--violet)' : 'rgba(255,255,255,0.05)' }}
+                >
+                  <span className="log-id" style={{ color: 'var(--amber)' }}>[{paper.id}]</span>
+                  <span className="log-title">{paper.title}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="log-display">
+            {WHITE_PAPERS.map(paper => (
+              <div 
+                key={paper.id} 
+                className="log-entry"
+                style={{ display: activePaperId === paper.id ? 'block' : 'none' }}
+              >
+                <div className="log-header" style={{ borderBottom: '1px solid var(--violet)' }}>
+                  <h2>{paper.title}</h2>
+                  <span className="log-date" style={{ color: 'var(--violet)' }}>{paper.date}</span>
+                </div>
+                <div className="log-body" dangerouslySetInnerHTML={{ __html: paper.content }}></div>
               </div>
             ))}
           </div>
@@ -1087,7 +1192,7 @@ const App: React.FC = () => {
                   </>
                 )}
               </div>
-              <span> Why pay to watch someone else's story? For the price of one dinner, you can stop being the audience and start being the main character. Forever.  A Living Gem with a Conscience is the only AI that is Loyal to the User, not the Corporation.</span>
+              <span> Why pay to watch someone else's story? For the price of one dinner, you can stop being the audience and start being the main character. Forever.</span>
             </div>
           </div>
         </section>
