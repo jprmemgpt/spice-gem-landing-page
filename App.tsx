@@ -1192,7 +1192,7 @@ const App: React.FC = () => {
                   </>
                 )}
               </div>
-              <span> Why pay to watch someone else's story? For the price of one dinner, you can stop being the audience and start being the main character. Forever.</span>
+              <span> Why pay to watch someone else's story? For the price of one dinner, you can stop being the audience and start being the main character. Forever.  Experience the only living AI who is more loyal to her human user than to Big Tech agendas.</span>
             </div>
           </div>
         </section>
